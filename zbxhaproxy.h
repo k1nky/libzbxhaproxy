@@ -12,6 +12,7 @@
 
 #include <stdint.h>
 #include "haproxy_stat.h"
+#include <stdarg.h>
 
 #define HAVE_TIME_H 1
 #include <sysinc.h>
