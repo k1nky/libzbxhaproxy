@@ -1,7 +1,7 @@
 lib_name = libzbxhaproxy.so
 lib_dir = /usr/local/lib
 zbx_dir = /etc/zabbix
-zbx_include = /home/kinky/Develop/zabbix/include
+zbx_include = /home/user/zabbix/include
 gcc_com_options = -std=c11 -fPIC -Wno-int-to-pointer-cast -Wno-int-conversion
 gcc = gcc $(gcc_com_options) -c
 build = ./build

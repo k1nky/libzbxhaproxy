@@ -19,6 +19,17 @@ int check_haproxy_server_name(haproxy_server_t* server, char* pxname, char* svna
     return (strcmp(sv_pxname, pxname) == 0 && strcmp(sv_svname, svname) == 0);
 }
 
+void free_haproxy_servers(haproxy_servers_t servers) {
+    haproxy_server_t *cur = servers;
+    haproxy_server_t *next;
+    
+    while (cur != NULL) {
+        next = cur->next;
+        free(cur);
+        cur = next;
+    }
+}
+
 /*
  * get haproxy server by name - `pxname` and `svname`
  * return:

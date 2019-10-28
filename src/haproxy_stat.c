@@ -11,8 +11,10 @@ int haproxy_init() {
     return HAPROXY_OK;
 }
 
-int haproxy_uninit() {
-    ht_del_hash_table(haproxy_info);
+int haproxy_uninit() {    
+    
+    ht_del_hash_table(haproxy_info);    
+    free_haproxy_servers(haproxy_stats);
     close(haproxy_socket_fd);
 }
 
@@ -41,6 +43,7 @@ int haproxy_cmd(char* socket, char* cmd) {
         if (send(haproxy_socket_fd, cmd, strlen(cmd), MSG_NOSIGNAL) > 0) {
             return HAPROXY_OK;            
         }        
+        close(haproxy_socket_fd);
         haproxy_connect(socket);
     }
     return HAPROXY_FAIL;

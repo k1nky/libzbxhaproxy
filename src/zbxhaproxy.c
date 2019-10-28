@@ -31,8 +31,6 @@ static int zbxhaproxy_info(AGENT_REQUEST *request, AGENT_RESULT *result) {
     char *key, *socket;
     char* value;
     
-    zabbix_log(LOG_LEVEL_DEBUG, "module %s have info request", HAPROXY_MOD_NAME);
-
     if (request->nparam != 2) {
         SET_MSG_RESULT(result, strdup("Invalid number of parameters. "
                 "Usage haproxy.info[socket, key]"));
@@ -43,7 +41,6 @@ static int zbxhaproxy_info(AGENT_REQUEST *request, AGENT_RESULT *result) {
     key = get_rparam(request, 1);
     
     value = haproxy_request_info(socket, key);
-    zabbix_log(LOG_LEVEL_DEBUG, "module %s response: %s", HAPROXY_MOD_NAME, value);
     SET_STR_RESULT(result, strdup(value));
     
     return SYSINFO_RET_OK;
@@ -53,8 +50,6 @@ static int zbxhaproxy_stat(AGENT_REQUEST *request, AGENT_RESULT *result) {
     char *key, *pxname, *svname, *socket;
     char* value;
     
-    zabbix_log(LOG_LEVEL_DEBUG, "module %s have stat request", HAPROXY_MOD_NAME);
-
     if (request->nparam != 4) {
         SET_MSG_RESULT(result, strdup("Invalid number of parameters. "
                 "Usage haproxy.stat[socket, pxname, svname, key]"));
@@ -67,7 +62,6 @@ static int zbxhaproxy_stat(AGENT_REQUEST *request, AGENT_RESULT *result) {
     key = get_rparam(request, 3);
     
     value = haproxy_request_stat(socket, pxname, svname, key);
-    zabbix_log(LOG_LEVEL_DEBUG, "module %s response: %s", HAPROXY_MOD_NAME, value);
     SET_STR_RESULT(result, strdup(value));
     
     return SYSINFO_RET_OK;
