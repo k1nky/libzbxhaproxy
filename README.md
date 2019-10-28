@@ -37,7 +37,7 @@ Also, Zabbix agent daemon user must have read/write access to the stats socket f
 
 2. Modify HAProxy server configuration: `stats socket /var/lib/haproxy/stats level user uid <zabbix_uid> mode 660` 
 
-More information you can find [HAProxy Documentation](https://cbonte.github.io/haproxy-dconv/1.8/management.html#9.3).
+More information you can find in [HAProxy Documentation](https://cbonte.github.io/haproxy-dconv/1.8/management.html#9.3).
 
 
 ## Zabbix templates
