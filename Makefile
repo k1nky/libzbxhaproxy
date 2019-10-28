@@ -1,6 +1,5 @@
 lib_name = libzbxhaproxy.so
 lib_dir = /usr/local/lib
-zbx_dir = /etc/zabbix
 zbx_include = /home/user/zabbix/include
 gcc_com_options = -std=c11 -fPIC -Wno-int-to-pointer-cast -Wno-int-conversion
 gcc = gcc $(gcc_com_options) -c
@@ -33,7 +32,7 @@ zbxhaproxy.o: $(addprefix $(src)/,zbxhaproxy.c zbxhaproxy.h)
 	$(gcc) $< -o $(addprefix $(build)/,$@) -Wno-implicit-function-declaration -I$(zbx_include)
 
 install:
-	/bin/bash install.sh $(lib_name) $(lib_dir) $(zbx_dir)
+	install -Z -v -m 755 $(build)/$(lib_name) $(lib_dir)/$(lib_name)
 	
 clean:
 	rm -rf $(build)

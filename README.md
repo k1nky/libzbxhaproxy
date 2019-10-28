@@ -1,7 +1,7 @@
 # libzbxhaproxy
-This project provides monitoring of HAProxy servers. **libzbxhaproxy** is natively compiled Zabbix agent module, written in C. The module enables discovery and monitoring of HAProxy servers stats and general information. Using the `LoadModule` directive in a zabbix agent configuration.
+This project provides monitoring of HAProxy servers. **libzbxhaproxy** is natively compiled Zabbix agent module, written in C. The module enables discovery and monitoring of HAProxy servers stats and general information. 
 
-A preconfigured Zabbix Template is also included.
+More about Zabbix agent modules see [Zabbix documentation](https://www.zabbix.com/documentation/4.0/manual/config/items/loadablemodules).
 
 ## How it works
 **libzbxhaproxy** is  a shared library used by Zabbix agent daemon and loaded on startup. The module extends Zabbix agent functionality with keys:
@@ -14,6 +14,7 @@ A preconfigured Zabbix Template is also included.
 
 Currently metrics values is obtained via HAProxy stats unix socket.
 
+
 ## Installation
 1. You need Zabbix headers for the assembly of the project. Download and unpack Zabbix source from [official site](https://www.zabbix.com/download_sources). 
 
@@ -24,4 +25,17 @@ Currently metrics values is obtained via HAProxy stats unix socket.
 `make zbx_include=<ZABBIX_INCLUDE>`
 > ZABBIX_INCLUDE is path to directory *include* from Zabbix source archive (see step i)
 
-4. `make install`
+4. `sudo make install`
+ 
+5. Now you have **libzbxhaproxy** , default placed in */usr/local/lib*. Then you should modify Zabbix agent configuration file (*zabbix_agentd.conf*) and set directive `LoadModule=/usr/local/lib/libzbxhaproxy.so`.
+	
+6. After that please restart Zabbix agent.
+
+## Zabbix templates
+A preconfigured Zabbix Template is also included in the project. You can take it from templates directory.
+There is two template files:
+
+- `zbx_haproxy_valuemaps.xml` - it's value maps and must be first imported (Administration -> General -> Value Mapping -> Import)
+
+- `zbx_haproxy_template.xml` - preconfigured HAProxy template contains discovery rule and general HAProxy information
+	
