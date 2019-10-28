@@ -18,13 +18,13 @@ More about Zabbix agent modules see [Zabbix documentation](https://www.zabbix.co
 2. Clone **libzbxhaproxy** repository. 
 	For example, `git clone https://github.com/k1nky/libzbxhaproxy.git`
 
-3. In the directory *libzbxhaproxy*: 
+3. In the directory *"libzbxhaproxy"*: 
 `make zbx_include=<ZABBIX_INCLUDE>`
-> ZABBIX_INCLUDE is path to directory *include* from Zabbix source archive (see step i)
+> ZABBIX_INCLUDE is path to directory *"include"* from Zabbix source archive (see step i)
 
 4. `sudo make install`
  
-5. Now you have **libzbxhaproxy**, default placed in */usr/local/lib*. Then you should modify Zabbix agent configuration (*zabbix_agentd.conf*) and set directive `LoadModule=/usr/local/lib/libzbxhaproxy.so`.
+5. Now you have **libzbxhaproxy**, default placed in *"/usr/local/lib"*. Then you should modify Zabbix agent configuration (*"zabbix_agentd.conf"*) and set directive `LoadModule=/usr/local/lib/libzbxhaproxy.so`.
 	
 6. After that please restart Zabbix agent.
 
