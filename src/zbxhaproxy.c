@@ -93,3 +93,4 @@ static int zbxhaproxy_test(AGENT_REQUEST *request, AGENT_RESULT *result) {
     SET_STR_RESULT(result, strdup("Hello"));
     return SYSINFO_RET_OK;
 }
+ 

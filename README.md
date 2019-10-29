@@ -43,9 +43,5 @@ More information you can find in [HAProxy Documentation](https://cbonte.github.i
 ## Zabbix templates
 A preconfigured Zabbix Template is also included in the project. You can take it from templates directory.
 
-There is two template files:
-
-- `zbx_haproxy_valuemaps.xml` - it's value maps and must be first imported (Administration -> General -> Value Mapping -> Import)
-
 - `zbx_haproxy_template.xml` - preconfigured HAProxy template contains discovery rule and general HAProxy information
 	

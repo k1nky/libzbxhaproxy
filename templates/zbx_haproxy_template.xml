@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <zabbix_export>
     <version>4.0</version>
-    <date>2019-10-28T19:04:36Z</date>
+    <date>2019-10-29T18:01:24Z</date>
     <groups>
         <group>
             <name>Templates</name>
@@ -168,9 +168,22 @@
                     <privatekey/>
                     <port/>
                     <filter>
-                        <evaltype>0</evaltype>
+                        <evaltype>1</evaltype>
                         <formula/>
-                        <conditions/>
+                        <conditions>
+                            <condition>
+                                <macro>{#SVNAME}</macro>
+                                <value>BACKEND</value>
+                                <operator>9</operator>
+                                <formulaid>B</formulaid>
+                            </condition>
+                            <condition>
+                                <macro>{#PXNAME}</macro>
+                                <value>stats</value>
+                                <operator>9</operator>
+                                <formulaid>A</formulaid>
+                            </condition>
+                        </conditions>
                     </filter>
                     <lifetime>30d</lifetime>
                     <description/>
@@ -184,7 +197,7 @@
                             <delay>120</delay>
                             <history>90d</history>
                             <trends>365d</trends>
-                            <status>0</status>
+                            <status>1</status>
                             <value_type>3</value_type>
                             <allowed_hosts/>
                             <units/>
@@ -246,7 +259,7 @@
                             <delay>120</delay>
                             <history>90d</history>
                             <trends>365d</trends>
-                            <status>0</status>
+                            <status>1</status>
                             <value_type>3</value_type>
                             <allowed_hosts/>
                             <units/>
@@ -491,7 +504,7 @@
                             <status>1</status>
                             <value_type>3</value_type>
                             <allowed_hosts/>
-                            <units/>
+                            <units>ms</units>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -507,7 +520,7 @@
                             <publickey/>
                             <privatekey/>
                             <port/>
-                            <description>The number of responses that were rejected because of security concerns.</description>
+                            <description>Time in ms took to finish last health check.</description>
                             <inventory_link>0</inventory_link>
                             <applications/>
                             <valuemap/>
@@ -548,7 +561,7 @@
                             <delay>60</delay>
                             <history>90d</history>
                             <trends>0</trends>
-                            <status>0</status>
+                            <status>1</status>
                             <value_type>1</value_type>
                             <allowed_hosts/>
                             <units/>
@@ -567,7 +580,24 @@
                             <publickey/>
                             <privatekey/>
                             <port/>
-                            <description>Last health check status/</description>
+                            <description>Status of last health check, one of:&#13;
+        UNK     -&gt; unknown&#13;
+        INI     -&gt; initializing&#13;
+        SOCKERR -&gt; socket error&#13;
+        L4OK    -&gt; check passed on layer 4, no upper layers testing enabled&#13;
+        L4TOUT  -&gt; layer 1-4 timeout&#13;
+        L4CON   -&gt; layer 1-4 connection problem, for example&#13;
+                   &quot;Connection refused&quot; (tcp rst) or &quot;No route to host&quot; (icmp)&#13;
+        L6OK    -&gt; check passed on layer 6&#13;
+        L6TOUT  -&gt; layer 6 (SSL) timeout&#13;
+        L6RSP   -&gt; layer 6 invalid response - protocol error&#13;
+        L7OK    -&gt; check passed on layer 7&#13;
+        L7OKC   -&gt; check conditionally passed on layer 7, for example 404 with&#13;
+                   disable-on-404&#13;
+        L7TOUT  -&gt; layer 7 (HTTP/SMTP) timeout&#13;
+        L7RSP   -&gt; layer 7 invalid response - protocol error&#13;
+        L7STS   -&gt; layer 7 response error, for example HTTP 5xx&#13;
+Notice: If a check is currently running, the last known status will be reported, prefixed with &quot;* &quot;. e. g. &quot;* L7OK&quot;.</description>
                             <inventory_link>0</inventory_link>
                             <applications/>
                             <valuemap/>
@@ -668,7 +698,7 @@
                             <delay>5m</delay>
                             <history>90d</history>
                             <trends>365d</trends>
-                            <status>0</status>
+                            <status>1</status>
                             <value_type>3</value_type>
                             <allowed_hosts/>
                             <units/>
@@ -687,7 +717,67 @@
                             <publickey/>
                             <privatekey/>
                             <port/>
-                            <description>The number of failed health checks.</description>
+                            <description>The number of failed health checks. (Only counts checks failed when the server is up.)</description>
+                            <inventory_link>0</inventory_link>
+                            <applications/>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Haproxy server {#PXNAME}/{#SVNAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Server {#PXNAME}/{#SVNAME} comp_byp</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},comp_byp]</key>
+                            <delay>60</delay>
+                            <history>90d</history>
+                            <trends>365d</trends>
+                            <status>0</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units>B</units>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description>Number of bytes that bypassed the HTTP compressor.</description>
                             <inventory_link>0</inventory_link>
                             <applications/>
                             <valuemap/>
@@ -731,7 +821,7 @@
                             <status>0</status>
                             <value_type>3</value_type>
                             <allowed_hosts/>
-                            <units/>
+                            <units>B</units>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -791,7 +881,7 @@
                             <status>0</status>
                             <value_type>3</value_type>
                             <allowed_hosts/>
-                            <units/>
+                            <units>B</units>
                             <snmpv3_contextname/>
                             <snmpv3_securityname/>
                             <snmpv3_securitylevel>0</snmpv3_securitylevel>
@@ -840,12 +930,72 @@
                             <master_item/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Server {#PXNAME}/{#SVNAME} dreq</name>
+                            <name>Server {#PXNAME}/{#SVNAME} comp_rsp</name>
                             <type>0</type>
                             <snmp_community/>
                             <snmp_oid/>
-                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},dreq]</key>
-                            <delay>120</delay>
+                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},comp_rsp]</key>
+                            <delay>60</delay>
+                            <history>90d</history>
+                            <trends>365d</trends>
+                            <status>0</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units>B</units>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description>Number of HTTP responses that were compressed.</description>
+                            <inventory_link>0</inventory_link>
+                            <applications/>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Haproxy server {#PXNAME}/{#SVNAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Server {#PXNAME}/{#SVNAME} conn_rate</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},conn_rate]</key>
+                            <delay>60</delay>
                             <history>90d</history>
                             <trends>365d</trends>
                             <status>0</status>
@@ -867,7 +1017,307 @@
                             <publickey/>
                             <privatekey/>
                             <port/>
-                            <description>The number of requests that were rejected because of security concerns.</description>
+                            <description>Number of connections over the last elapsed second.</description>
+                            <inventory_link>0</inventory_link>
+                            <applications/>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Haproxy server {#PXNAME}/{#SVNAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Server {#PXNAME}/{#SVNAME} conn_tot</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},conn_tot]</key>
+                            <delay>60</delay>
+                            <history>90d</history>
+                            <trends>365d</trends>
+                            <status>0</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description>Cumulative number of connections.</description>
+                            <inventory_link>0</inventory_link>
+                            <applications/>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Haproxy server {#PXNAME}/{#SVNAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Server {#PXNAME}/{#SVNAME} ctime</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},ctime]</key>
+                            <delay>60</delay>
+                            <history>90d</history>
+                            <trends>365d</trends>
+                            <status>0</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units>ms</units>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description>The average connect time in ms over the 1024 last requests.</description>
+                            <inventory_link>0</inventory_link>
+                            <applications/>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Haproxy server {#PXNAME}/{#SVNAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Server {#PXNAME}/{#SVNAME} dcon</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},dcon]</key>
+                            <delay>120</delay>
+                            <history>90d</history>
+                            <trends>365d</trends>
+                            <status>1</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description>Requests denied by &quot;tcp-request connection&quot; rules</description>
+                            <inventory_link>0</inventory_link>
+                            <applications/>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Haproxy server {#PXNAME}/{#SVNAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Server {#PXNAME}/{#SVNAME} downtime</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},downtime]</key>
+                            <delay>120</delay>
+                            <history>90d</history>
+                            <trends>365d</trends>
+                            <status>1</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description>Total downtime (in seconds). The value for the backend is the downtime for the whole backend, not the sum of the server downtime.</description>
+                            <inventory_link>0</inventory_link>
+                            <applications/>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Haproxy server {#PXNAME}/{#SVNAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Server {#PXNAME}/{#SVNAME} dreq</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},dreq]</key>
+                            <delay>120</delay>
+                            <history>90d</history>
+                            <trends>365d</trends>
+                            <status>1</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description>The number of requests that were rejected because of security concerns. For tcp this is because of a matched tcp-request content rule. For http this is because of a matched http-request or tarpit rule.</description>
                             <inventory_link>0</inventory_link>
                             <applications/>
                             <valuemap/>
@@ -908,7 +1358,7 @@
                             <delay>120</delay>
                             <history>90d</history>
                             <trends>365d</trends>
-                            <status>0</status>
+                            <status>1</status>
                             <value_type>3</value_type>
                             <allowed_hosts/>
                             <units/>
@@ -927,7 +1377,67 @@
                             <publickey/>
                             <privatekey/>
                             <port/>
-                            <description>The number of responses that were rejected because of security concerns.</description>
+                            <description>The number of responses that were rejected because of security concerns. For http this is because of a matched http-request rule, or &quot;option checkcache&quot;.</description>
+                            <inventory_link>0</inventory_link>
+                            <applications/>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Haproxy server {#PXNAME}/{#SVNAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Server {#PXNAME}/{#SVNAME} dses</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},dses]</key>
+                            <delay>120</delay>
+                            <history>90d</history>
+                            <trends>365d</trends>
+                            <status>1</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description>Requests denied by &quot;tcp-request session&quot; rules</description>
                             <inventory_link>0</inventory_link>
                             <applications/>
                             <valuemap/>
@@ -987,7 +1497,7 @@
                             <publickey/>
                             <privatekey/>
                             <port/>
-                            <description>The number of connections that encountered an error.</description>
+                            <description>Number of requests that encountered an error trying to connect to a backend server. The backend stat is the sum of the stat for all servers of that backend, plus any connection errors not associated with a particular server (such as the backend having no active servers).</description>
                             <inventory_link>0</inventory_link>
                             <applications/>
                             <valuemap/>
@@ -1047,7 +1557,13 @@
                             <publickey/>
                             <privatekey/>
                             <port/>
-                            <description>The number of requests that encountered an error.</description>
+                            <description>The number of requests that encountered an error. Some of the possible causes are:&#13;
+     - early termination from the client, before the request has been sent.&#13;
+     - read error from the client&#13;
+     - client timeout&#13;
+     - client closed connection&#13;
+     - various bad requests from the client.&#13;
+     - request was tarpitted.</description>
                             <inventory_link>0</inventory_link>
                             <applications/>
                             <valuemap/>
@@ -1107,7 +1623,71 @@
                             <publickey/>
                             <privatekey/>
                             <port/>
-                            <description>The number of responses that encountered an error.</description>
+                            <description>The number of responses that encountered an error. &#13;
+srv_abrt will be counted here also.&#13;
+Some other errors are:&#13;
+     - write error on the client socket (won't be counted for the server stat)&#13;
+     - failure applying filters to the response.</description>
+                            <inventory_link>0</inventory_link>
+                            <applications/>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Haproxy server {#PXNAME}/{#SVNAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Server {#PXNAME}/{#SVNAME} hanafail</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},hanafail]</key>
+                            <delay>60</delay>
+                            <history>90d</history>
+                            <trends>0</trends>
+                            <status>0</status>
+                            <value_type>1</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description>Failed health checks details.</description>
                             <inventory_link>0</inventory_link>
                             <applications/>
                             <valuemap/>
@@ -1440,15 +2020,15 @@
                             <master_item/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Server {#PXNAME}/{#SVNAME} qcur</name>
+                            <name>Server {#PXNAME}/{#SVNAME} hrsp_other</name>
                             <type>0</type>
                             <snmp_community/>
                             <snmp_oid/>
-                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},qcur]</key>
+                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},hrsp_other]</key>
                             <delay>60</delay>
                             <history>90d</history>
                             <trends>365d</trends>
-                            <status>0</status>
+                            <status>1</status>
                             <value_type>3</value_type>
                             <allowed_hosts/>
                             <units/>
@@ -1467,7 +2047,307 @@
                             <publickey/>
                             <privatekey/>
                             <port/>
-                            <description>The number of client connections that are currently queued and not yet assigned to a server, Only for backend</description>
+                            <description>HTTP responses with other codes (protocol error).</description>
+                            <inventory_link>0</inventory_link>
+                            <applications/>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Haproxy server {#PXNAME}/{#SVNAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Server {#PXNAME}/{#SVNAME} lastchg</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},lastchg]</key>
+                            <delay>60</delay>
+                            <history>90d</history>
+                            <trends>365d</trends>
+                            <status>1</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description>Number of seconds since the last UP&lt;-&gt;DOWN transition.</description>
+                            <inventory_link>0</inventory_link>
+                            <applications/>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Haproxy server {#PXNAME}/{#SVNAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Server {#PXNAME}/{#SVNAME} last_agt</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},last_agt]</key>
+                            <delay>60</delay>
+                            <history>90d</history>
+                            <trends>0</trends>
+                            <status>1</status>
+                            <value_type>1</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description>Last agent check contents or textual error.</description>
+                            <inventory_link>0</inventory_link>
+                            <applications/>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Haproxy server {#PXNAME}/{#SVNAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Server {#PXNAME}/{#SVNAME} last_chk</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},last_chk]</key>
+                            <delay>60</delay>
+                            <history>90d</history>
+                            <trends>0</trends>
+                            <status>1</status>
+                            <value_type>1</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description>Last health check contents or textual error.</description>
+                            <inventory_link>0</inventory_link>
+                            <applications/>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Haproxy server {#PXNAME}/{#SVNAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Server {#PXNAME}/{#SVNAME} lbtot</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},lbtot]</key>
+                            <delay>60</delay>
+                            <history>90d</history>
+                            <trends>365d</trends>
+                            <status>1</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description>Total number of times a server was selected, either for new sessions, or when re-dispatching. The server counter is the number of times that server was selected.</description>
+                            <inventory_link>0</inventory_link>
+                            <applications/>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Haproxy server {#PXNAME}/{#SVNAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Server {#PXNAME}/{#SVNAME} qcur</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},qcur]</key>
+                            <delay>60</delay>
+                            <history>90d</history>
+                            <trends>365d</trends>
+                            <status>1</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description>Current queued requests. For the backend this reports the number queued without a server assigned.</description>
                             <inventory_link>0</inventory_link>
                             <applications/>
                             <valuemap/>
@@ -1508,7 +2388,7 @@
                             <delay>60</delay>
                             <history>90d</history>
                             <trends>365d</trends>
-                            <status>0</status>
+                            <status>1</status>
                             <value_type>3</value_type>
                             <allowed_hosts/>
                             <units/>
@@ -1528,6 +2408,66 @@
                             <privatekey/>
                             <port/>
                             <description>The most connections that have ever been queued at once. Only for backend</description>
+                            <inventory_link>0</inventory_link>
+                            <applications/>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Haproxy server {#PXNAME}/{#SVNAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Server {#PXNAME}/{#SVNAME} qtime</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},qtime]</key>
+                            <delay>60</delay>
+                            <history>90d</history>
+                            <trends>365d</trends>
+                            <status>1</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units>ms</units>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description>The average queue time in ms over the 1024 last requests.</description>
                             <inventory_link>0</inventory_link>
                             <applications/>
                             <valuemap/>
@@ -1620,11 +2560,11 @@
                             <master_item/>
                         </item_prototype>
                         <item_prototype>
-                            <name>Server {#PXNAME}/{#SVNAME} rate_max</name>
+                            <name>Server {#PXNAME}/{#SVNAME} rate_lim</name>
                             <type>0</type>
                             <snmp_community/>
                             <snmp_oid/>
-                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},rate_max]</key>
+                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},rate_lim]</key>
                             <delay>60</delay>
                             <history>90d</history>
                             <trends>365d</trends>
@@ -1647,7 +2587,247 @@
                             <publickey/>
                             <privatekey/>
                             <port/>
+                            <description>Configured limit on new sessions per second</description>
+                            <inventory_link>0</inventory_link>
+                            <applications/>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Haproxy server {#PXNAME}/{#SVNAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Server {#PXNAME}/{#SVNAME} rate_max</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},rate_max]</key>
+                            <delay>60</delay>
+                            <history>90d</history>
+                            <trends>365d</trends>
+                            <status>1</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
                             <description>The highest rate at which connections have ever been established to the given server.</description>
+                            <inventory_link>0</inventory_link>
+                            <applications/>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Haproxy server {#PXNAME}/{#SVNAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Server {#PXNAME}/{#SVNAME} req_rate</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},req_rate]</key>
+                            <delay>60</delay>
+                            <history>90d</history>
+                            <trends>365d</trends>
+                            <status>1</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description>HTTP requests per second over last elapsed second</description>
+                            <inventory_link>0</inventory_link>
+                            <applications/>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Haproxy server {#PXNAME}/{#SVNAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Server {#PXNAME}/{#SVNAME} req_tot</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},req_tot]</key>
+                            <delay>60</delay>
+                            <history>90d</history>
+                            <trends>365d</trends>
+                            <status>1</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units/>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description>Total number of HTTP requests received.</description>
+                            <inventory_link>0</inventory_link>
+                            <applications/>
+                            <valuemap/>
+                            <logtimefmt/>
+                            <preprocessing/>
+                            <jmx_endpoint/>
+                            <timeout>3s</timeout>
+                            <url/>
+                            <query_fields/>
+                            <posts/>
+                            <status_codes>200</status_codes>
+                            <follow_redirects>1</follow_redirects>
+                            <post_type>0</post_type>
+                            <http_proxy/>
+                            <headers/>
+                            <retrieve_mode>0</retrieve_mode>
+                            <request_method>0</request_method>
+                            <output_format>0</output_format>
+                            <allow_traps>0</allow_traps>
+                            <ssl_cert_file/>
+                            <ssl_key_file/>
+                            <ssl_key_password/>
+                            <verify_peer>0</verify_peer>
+                            <verify_host>0</verify_host>
+                            <application_prototypes>
+                                <application_prototype>
+                                    <name>Haproxy server {#PXNAME}/{#SVNAME}</name>
+                                </application_prototype>
+                            </application_prototypes>
+                            <master_item/>
+                        </item_prototype>
+                        <item_prototype>
+                            <name>Server {#PXNAME}/{#SVNAME} rtime</name>
+                            <type>0</type>
+                            <snmp_community/>
+                            <snmp_oid/>
+                            <key>haproxy.stat[{$HAPROXY_SOCKET},{#PXNAME},{#SVNAME},rtime]</key>
+                            <delay>60</delay>
+                            <history>90d</history>
+                            <trends>365d</trends>
+                            <status>0</status>
+                            <value_type>3</value_type>
+                            <allowed_hosts/>
+                            <units>ms</units>
+                            <snmpv3_contextname/>
+                            <snmpv3_securityname/>
+                            <snmpv3_securitylevel>0</snmpv3_securitylevel>
+                            <snmpv3_authprotocol>0</snmpv3_authprotocol>
+                            <snmpv3_authpassphrase/>
+                            <snmpv3_privprotocol>0</snmpv3_privprotocol>
+                            <snmpv3_privpassphrase/>
+                            <params/>
+                            <ipmi_sensor/>
+                            <authtype>0</authtype>
+                            <username/>
+                            <password/>
+                            <publickey/>
+                            <privatekey/>
+                            <port/>
+                            <description>The average response time in ms over the 1024 last requests (0 for TCP)</description>
                             <inventory_link>0</inventory_link>
                             <applications/>
                             <valuemap/>
@@ -1933,7 +3113,7 @@ no check 	Health checks are not enabled for this server.</description>
                             <delay>5m</delay>
                             <history>90d</history>
                             <trends>365d</trends>
-                            <status>0</status>
+                            <status>1</status>
                             <value_type>3</value_type>
                             <allowed_hosts/>
                             <units/>
@@ -1993,7 +3173,7 @@ no check 	Health checks are not enabled for this server.</description>
                             <delay>120</delay>
                             <history>90d</history>
                             <trends>365d</trends>
-                            <status>0</status>
+                            <status>1</status>
                             <value_type>3</value_type>
                             <allowed_hosts/>
                             <units/>

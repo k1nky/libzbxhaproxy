@@ -34,7 +34,6 @@ int zbx_module_uninit(void);
 static int item_timeout = 0;
 
 static ZBX_METRIC keys[] =
-/*	KEY			FLAG		FUNCTION	TEST PARAMETERS */
 {
 	{"haproxy.info",	CF_HAVEPARAMS,	zbxhaproxy_info,	"/run/haproxy/admin.sock,Version"},
 	{"haproxy.stat",	CF_HAVEPARAMS,	zbxhaproxy_stat,	"/run/haproxy/admin.sock,stats,BACKEND,status"},
