@@ -2,7 +2,7 @@
 
 int zbx_module_api_version(void) {
     
-	return ZBX_MODULE_API_VERSION;
+	return ZBX_MODULE_API_VERSION_ONE;
 }
 
 void zbx_module_item_timeout(int timeout) {
