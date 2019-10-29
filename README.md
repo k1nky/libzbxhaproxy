@@ -4,7 +4,7 @@ This project provides monitoring of HAProxy servers. **libzbxhaproxy** is native
 ## How it works
 **libzbxhaproxy** is  a shared library used by Zabbix agent daemon and loaded on startup. The module extends Zabbix agent functionality with keys:
 
-- `haprorxy.discovery[<socket>]` - discovering all exists HAProxy servers
+- `haprorxy.discovery[<socket>]` - discovering all  HAProxy servers (FRONTEND, BACKEND)
 
 - `haprorxy.info[<socket>,<pxname>,<svname>,<key>]` - present general information of HAProxy instance, such as Version, Uptime, etc
 
