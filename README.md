@@ -44,4 +44,6 @@ More information you can find in [HAProxy Documentation](https://cbonte.github.i
 A preconfigured Zabbix Template is also included in the project. You can take it from templates directory.
 
 - `zbx_haproxy_template.xml` - preconfigured HAProxy template contains discovery rule and general HAProxy information
+
+Set path to the HAProxy stats socket file by template defined macros `{$HAPROXY_SOCKET}`.
 	
