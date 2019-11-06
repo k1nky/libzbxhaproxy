@@ -10,11 +10,12 @@
 
 #define HAPROXY_MOD_NAME "zbxhaproxy"
 
-#include <stdint.h>
 #include "haproxy_stat.h"
-#include <stdarg.h>
 
 #define HAVE_TIME_H 1
+#define HAVE_STDARG_H 1
+#define HAVE_STDINT_H 1
+typedef	unsigned char	u_char;
 #include <sysinc.h>
 #include <module.h>
 #include <common.h>
