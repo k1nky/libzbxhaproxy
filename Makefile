@@ -14,7 +14,6 @@ build_dir:
 	mkdir -p $(build)
 
 fix_config_h:
-	#if test -f $(zbx_include)/config.h.in; then cp $(zbx_include)/config.h.in $(zbx_include)/config.h; fi
 	if test -f $(zbx_include)/config.h.in; then echo "" > $(zbx_include)/config.h; fi
 
 zbxhaproxy: hash_table.o prime.o haproxy_stat.o haproxy_servers.o zbxhaproxy.o
