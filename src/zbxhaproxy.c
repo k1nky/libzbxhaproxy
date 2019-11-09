@@ -1,8 +1,11 @@
 #include "zbxhaproxy.h"
 
 int zbx_module_api_version(void) {
-    
-	return ZBX_MODULE_API_VERSION_ONE;
+#ifdef ZBX_MODULE_API_VERSION  
+    return ZBX_MODULE_API_VERSION;
+#else
+    return ZBX_MODULE_API_VERSION_ONE;
+#endif
 }
 
 void zbx_module_item_timeout(int timeout) {
