@@ -1,6 +1,7 @@
 lib_name = libzbxhaproxy.so
 lib_dir = /usr/local/lib
 zbx_include = /home/user/zabbix/include
+#gcc_com_options = -std=c11 -fPIC -w -lm
 gcc_com_options = -std=gnu11 -fPIC -w -lm
 gcc = gcc $(gcc_com_options) -c
 build = ./build
