@@ -1,4 +1,4 @@
-# libzbxhaproxy
+# libzbxhaproxy [![Build Status](https://travis-ci.org/k1nky/libzbxhaproxy.svg?branch=master)](https://travis-ci.org/k1nky/libzbxhaproxy)
 This project provides monitoring of HAProxy servers. **libzbxhaproxy** is natively compiled Zabbix agent module, written in C. The module enables discovery and present HAProxy servers stats and general information.
 
 ## How it works
