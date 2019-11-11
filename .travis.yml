@@ -1,0 +1,19 @@
+language: c
+os: linux
+
+jobs:
+  include:
+    - name: "zabbix 3.0"
+      env: ZBX_INCLUDE="/tmp/zabbix-3.0.0/include"
+
+    - name: "zabbix 4.0"
+      env: ZBX_INCLUDE="/tmp/zabbix-4.0.0/include"
+
+install:
+  - "curl -sL -o /tmp/zabbix-3.0.0.tar.gz http://sourceforge.net/projects/zabbix/files/ZABBIX%20Latest%20Stable/3.0.0/zabbix-3.0.0.tar.gz"
+  - "curl -sL -o /tmp/zabbix-4.0.0.tar.gz http://sourceforge.net/projects/zabbix/files/ZABBIX%20Latest%20Stable/4.0.0/zabbix-4.0.0.tar.gz"
+  - "tar -xzC /tmp -f /tmp/zabbix-3.0.0.tar.gz"
+  - "tar -xzC /tmp -f /tmp/zabbix-4.0.0.tar.gz"
+
+script:
+  - "make zbx_include=$ZBX_INCLUDE"
