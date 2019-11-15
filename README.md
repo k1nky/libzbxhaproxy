@@ -1,6 +1,9 @@
 # libzbxhaproxy [![Build Status](https://travis-ci.org/k1nky/libzbxhaproxy.svg?branch=master)](https://travis-ci.org/k1nky/libzbxhaproxy) [![BCH compliance](https://bettercodehub.com/edge/badge/k1nky/libzbxhaproxy?branch=master)](https://bettercodehub.com/)
 This project provides monitoring of HAProxy servers. **libzbxhaproxy** is natively compiled Zabbix agent module, written in C. The module enables discovery and present HAProxy servers stats and general information.
 
+RPM packages for RHEL 7 are available in the [Release](https://github.com/k1nky/libzbxhaproxy/releases/) .
+
+
 ## How it works
 **libzbxhaproxy** is  a shared library used by Zabbix agent daemon and loaded on startup. The module extends Zabbix agent functionality with keys:
 
