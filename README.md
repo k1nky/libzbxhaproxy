@@ -50,12 +50,13 @@ Currently metrics values is obtained via HAProxy stats UNIX socket. Please, make
 Also, Zabbix agent daemon user must have read/write access to the stats socket file. For example, one of the solutions:
 
 1. Get uid Zabbix user: 
-<code>$ id zabbix
-	> uid=123(zabbix) gid=128(zabbix) groups=128(zabbix) ...
-</code>
+
+`$ id zabbix`
+`>> uid=123(zabbix) gid=128(zabbix) groups=128(zabbix) ...`
+
 2. Modify HAProxy server configuration: 
 
-	`stats socket /var/lib/haproxy/stats level user uid <zabbix_uid> mode 660` 
+`stats socket /var/lib/haproxy/stats level user uid <zabbix_uid> mode 660`
 
 More information about HAProxy stats you can find in [HAProxy Documentation](https://cbonte.github.io/haproxy-dconv/1.8/management.html#9.3).
 
