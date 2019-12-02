@@ -1,7 +1,7 @@
 # libzbxhaproxy [![Build Status](https://travis-ci.org/k1nky/libzbxhaproxy.svg?branch=master)](https://travis-ci.org/k1nky/libzbxhaproxy) [![BCH compliance](https://bettercodehub.com/edge/badge/k1nky/libzbxhaproxy?branch=master)](https://bettercodehub.com/)
 This project provides monitoring of HAProxy servers. **libzbxhaproxy** is natively compiled Zabbix agent module, written in C. The module enables discovery and present HAProxy servers stats and general information.
 
-RPM packages for RHEL 7 are available in the [Release](https://github.com/k1nky/libzbxhaproxy/releases/) .
+RPM packages for RHEL 6, 7 are available in the [Release](https://github.com/k1nky/libzbxhaproxy/releases/) .
 
 
 ## How it works
@@ -35,11 +35,12 @@ More about Zabbix agent loadable modules see [Zabbix documentation](https://www.
 	
 6. Please restart Zabbix agent. You can verify that the module has started by Zabbix agent log:
 
-	`XXXX:XXXXXXXX:XXXXX.XXX using configuration file: /etc/zabbix/zabbix_agentd.conf`
-	`XXXX:XXXXXXXX:XXXXX.XXX starting agent module zbxhaproxy`
-	`XXXX:XXXXXXXX:XXXXX.XXX loaded modules: libzbxhaproxy.so`
-	`XXXX:XXXXXXXX:XXXXX.XXX agent #0 started [main process]`
-
+<pre>
+	XXXX:XXXXXXXX:XXXXX.XXX using configuration file: /etc/zabbix/zabbix_agentd.conf
+	XXXX:XXXXXXXX:XXXXX.XXX starting agent module zbxhaproxy
+	XXXX:XXXXXXXX:XXXXX.XXX loaded modules: libzbxhaproxy.so
+	XXXX:XXXXXXXX:XXXXX.XXX agent #0 started [main process]
+</pre>
 
 ## Post-Installation
 Currently metrics values is obtained via HAProxy stats UNIX socket. Please, make sure stats option enabled in your HAProxy server configuration like:
@@ -49,10 +50,9 @@ Currently metrics values is obtained via HAProxy stats UNIX socket. Please, make
 Also, Zabbix agent daemon user must have read/write access to the stats socket file. For example, one of the solutions:
 
 1. Get uid Zabbix user: 
-
-	`$ id zabbix` 
-	`> uid=123(zabbix) gid=128(zabbix) groups=128(zabbix) ...`
-
+<code>$ id zabbix
+	> uid=123(zabbix) gid=128(zabbix) groups=128(zabbix) ...
+</code>
 2. Modify HAProxy server configuration: 
 
 	`stats socket /var/lib/haproxy/stats level user uid <zabbix_uid> mode 660` 
