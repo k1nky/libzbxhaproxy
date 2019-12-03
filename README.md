@@ -9,7 +9,7 @@ RPM packages for RHEL 6, 7 are available in the [Release](https://github.com/k1n
 
 - `haproxy.discovery[<socket>]` - discovering all  HAProxy servers (FRONTEND, BACKEND)
 
-- `haproxy.info[<socket>,<pxname>,<svname>,<key>]` - present general information of HAProxy instance, such as Version, Uptime, etc
+- `haproxy.info[<socket>,<key>]` - present general information of HAProxy instance, such as Version, Uptime, etc
 
 - `haproxy.stat[<socket>,<pxname>,<svname>,<key>]` - present stats of HAProxy servers
 
