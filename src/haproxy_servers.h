@@ -10,6 +10,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 // max number of haproxy metrics
 #define MAX_NUM_METRICS 100
@@ -36,7 +37,7 @@ typedef enum {
     frontend,
     backend,
     server,
-    listener        
+    listener
 } haproxy_server_type_t;
 
 int check_haproxy_server_name(haproxy_server_t* server, char* pxname, char* svname);

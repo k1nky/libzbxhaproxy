@@ -12,6 +12,16 @@ int HT_INITIAL_BASE_SIZE = 151;
 int HT_PRIME_1 = 151;
 int HT_PRIME_2 = 163;
 static ht_item HT_DELETED_ITEM = {NULL, NULL};
+static ht_item* ht_new_item(const char* k, const char* v);
+static ht_hash_table* ht_new_sized(const int base_size);
+static void ht_del_item(ht_item* item);
+static int ht_hash(const char* s, const int a, const int m);
+static int ht_get_hash(const char* s, const int num_buckets, const int attempt);
+static void ht_resize(ht_hash_table* ht, const int base_size);
+static void ht_resize_up(ht_hash_table* ht);
+static void ht_resize_down(ht_hash_table* ht);
+
+
 
 static ht_item* ht_new_item(const char* k, const char* v)
 {

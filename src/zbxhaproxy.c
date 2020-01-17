@@ -21,12 +21,12 @@ ZBX_METRIC *zbx_module_item_list(void) {
 int zbx_module_init(void) {
     zabbix_log(LOG_LEVEL_INFORMATION, "starting agent module %s", HAPROXY_MOD_NAME);
     haproxy_init();
-    
+
     return SYSINFO_RET_OK;
 }
 
 int zbx_module_uninit(void) {
-    haproxy_uninit();    
+    haproxy_uninit();
     return SYSINFO_RET_OK;
 }
 
@@ -87,7 +87,6 @@ static int zbxhaproxy_discovery(AGENT_REQUEST *request, AGENT_RESULT *result) {
     data = haproxy_discovery(socket);
     zabbix_log(LOG_LEVEL_DEBUG, "module %s response: %s", HAPROXY_MOD_NAME, data);
     SET_STR_RESULT(result, data);
-    
     return SYSINFO_RET_OK;
 }
 
