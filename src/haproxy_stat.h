@@ -16,9 +16,10 @@
 #include <stdio.h>
 #include <time.h>
 #include <errno.h>
+#include <unistd.h>
+#include <assert.h>
 #include "hash_table.h"
 #include "haproxy_servers.h"
-
 
 #define CACHE_TTL 30
 #define HAPROXY_NO_DATA ""
@@ -26,10 +27,8 @@
 #define HAPROXY_FAIL -1
 #define MAX_NUM_METRICS 100
 #define MAX_RETRIES 2
-#define RECV_BUFFER_SIZE 8192
 
 int haproxy_socket_fd;
-char recv_buffer[RECV_BUFFER_SIZE];
 time_t stat_timestamp;
 time_t info_timestamp;
 ht_hash_table* haproxy_info;
@@ -48,7 +47,7 @@ char* haproxy_info_value(char* name);
 void haproxy_parse_info(char* s);
 void haproxy_parse_stat(char* s);
 void haproxy_parse_metrics(char* s);
-int haproxy_recv(char* buffer, size_t size);
+int haproxy_recv(char **ret_data);
 int haproxy_update_info(char* socket);
 int haproxy_update_stat(char* socket);
 

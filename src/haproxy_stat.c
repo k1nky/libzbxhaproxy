@@ -4,18 +4,18 @@ int haproxy_init() {
     haproxy_info = ht_new();
     haproxy_socket_fd = 0;
     haproxy_stats = NULL;
-    memset(haproxy_metrics, 0, MAX_NUM_METRICS);
+    memset(haproxy_metrics, 0, sizeof(haproxy_metrics));
     stat_timestamp = time(NULL) - 2 * CACHE_TTL;
     info_timestamp = time(NULL) - 2 * CACHE_TTL;
-    
+
     return HAPROXY_OK;
 }
 
-int haproxy_uninit() {    
-    
-    ht_del_hash_table(haproxy_info);    
+int haproxy_uninit() {
+    ht_del_hash_table(haproxy_info);
     free_haproxy_servers(haproxy_stats);
     close(haproxy_socket_fd);
+    return HAPROXY_OK;
 }
 
 int haproxy_connect(char* socket_path) {
@@ -41,8 +41,8 @@ int haproxy_cmd(char* socket, char* cmd) {
     
     for (int i = 0; i < MAX_RETRIES; i++) {
         if (send(haproxy_socket_fd, cmd, strlen(cmd), MSG_NOSIGNAL) > 0) {
-            return HAPROXY_OK;            
-        }        
+            return HAPROXY_OK;
+        }
         close(haproxy_socket_fd);
         haproxy_connect(socket);
     }
@@ -52,17 +52,33 @@ int haproxy_cmd(char* socket, char* cmd) {
 char* haproxy_discovery(char* socket) {
     haproxy_server_t *sv = NULL;
     char *pxname, *svname;
-    char data[512];
-    char buf[128];
-    
+    char *data;
+    char buf[4096];
+    int data_size = 4096;
     haproxy_update_stat(socket);
+
     sv = haproxy_stats;
-    memset(data, 0, sizeof(data));
+    data = (char*) calloc(data_size, sizeof(char));
+    if(data == NULL){
+	fprintf(stderr,"Cannot allocate memory for data in haproxy_discovery\n");
+	return NULL;
+    }
     strcat(data, "{\"data\":[");
+
     while (sv != NULL) {
         pxname = sv->stat;
         svname = sv->stat + sv->offsets[1];
         sprintf(buf, "{\"{#PXNAME}\":\"%s\",\"{#SVNAME}\":\"%s\"}", pxname, svname);
+	//check if we have enough of free memory to append the content of the next buffer
+	if ((strlen(data) + strlen(buf) + 4) > data_size){
+		//increment in one page size
+		data_size = data_size + 4096;
+		data = (char *) realloc(data, data_size * sizeof(char));
+		if(data == NULL){
+			fprintf(stderr,"Cannot realloc memory for data in haproxy_discovery\n");
+		        return NULL;
+		}
+	}
         strcat(data, buf);
         if (sv->next != NULL) {
             strcat(data, ",");
@@ -70,25 +86,65 @@ char* haproxy_discovery(char* socket) {
         sv = sv->next;
     }
     strcat(data, "]}");
-    
-    return strdup(data);
+
+    return data;
 }
 
-int haproxy_recv(char* buffer, size_t size) {
-    
-    memset(buffer, 0, size);
-    if (recv(haproxy_socket_fd, buffer, size, 0) < 0) {
+int haproxy_recv(char **ret_data) {
+
+    int data_size = 4096, bytes_read, total_bytes_read = 0;
+    char *data, buffer[4096];
+
+    assert(*ret_data != NULL);
+    memset(buffer, 0, sizeof(buffer));
+    data = (char*) calloc(data_size, sizeof(char));
+    if(data == NULL){
+        fprintf(stderr,"Cannot allocate memory for data in haproxy_recv\n");
         return HAPROXY_FAIL;
     }
-    
+
+    while ((bytes_read = recv(haproxy_socket_fd, buffer, sizeof(buffer), 0)) > 0) {
+    	//check if we have enough of free memory to append the content of the next buffer
+        if ((total_bytes_read + bytes_read + 2) > data_size){
+                //increment in one page size
+                data_size = data_size + 4096;
+
+                data = (char *) realloc(data, data_size * sizeof(char));
+                if(data == NULL){
+                        fprintf(stderr,"Cannot realloc memory for data in haproxy_recv\n");
+                        return HAPROXY_FAIL;
+                }
+
+        }
+
+        memcpy(data + total_bytes_read, buffer, bytes_read);
+	total_bytes_read += bytes_read;
+
+    }
+    if(data != NULL){
+	data[total_bytes_read]='\0';
+    }
+    if (bytes_read == -1){
+	if(data != NULL){
+	    free (data);
+    	}
+        return HAPROXY_FAIL;
+    }
+
+    *ret_data = data;
+
     return HAPROXY_OK;
 }
 
 int haproxy_update_info(char* socket) {
+    char *recv_buffer;
     if (haproxy_cmd(socket, "show info\n") == HAPROXY_FAIL) goto get_info_fail;
-    if (haproxy_recv(recv_buffer, sizeof(recv_buffer)) == HAPROXY_FAIL) goto get_info_fail;
+    if (haproxy_recv(&recv_buffer) == HAPROXY_FAIL) goto get_info_fail;
     haproxy_parse_info(recv_buffer);
-    
+    if(recv_buffer != NULL){
+	free(recv_buffer);
+        recv_buffer = NULL;
+    }
     return HAPROXY_OK;
     
 get_info_fail:
@@ -96,10 +152,14 @@ get_info_fail:
 }
 
 int haproxy_update_stat(char* socket) {
+    char *recv_buffer;
     if (haproxy_cmd(socket, "show stat\n") == HAPROXY_FAIL) goto get_stat_fail;
-    if (haproxy_recv(recv_buffer, sizeof(recv_buffer)) == HAPROXY_FAIL) goto get_stat_fail;
+    if (haproxy_recv(&recv_buffer) == HAPROXY_FAIL) goto get_stat_fail;
     haproxy_parse_stat(recv_buffer);
-    
+    if(recv_buffer != NULL){ 
+        free (recv_buffer);
+        recv_buffer = NULL;
+    }
     return HAPROXY_OK;
     
 get_stat_fail:
@@ -168,8 +228,12 @@ void haproxy_parse_stat(char* s) {
     line = (char*)strtok(s, "\n");
     
     while (line != NULL) {        
-        if (line[0] == '#') haproxy_parse_metrics(line);
-        else haproxy_parse_stat_line(line);        
+        if (line[0] == '#') {
+		haproxy_parse_metrics(line);
+	}
+        else {
+		haproxy_parse_stat_line(line);
+	}
         line = (char*)strtok(NULL, "\n");
     }
 }

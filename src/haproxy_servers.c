@@ -109,7 +109,6 @@ haproxy_servers_t update_haproxy_servers(haproxy_servers_t servers, haproxy_serv
     pxname = server->stat;
     svname = server->stat + server->offsets[1];
     prev = get_prev_haproxy_server(servers, pxname, svname);
-    
     if (prev->next != NULL) {
         // replace exists server in list
         server->next = prev->next->next;
@@ -119,6 +118,6 @@ haproxy_servers_t update_haproxy_servers(haproxy_servers_t servers, haproxy_serv
         // insert new server in list
         prev->next = server;
     }
-    
+
     return servers;
 }
