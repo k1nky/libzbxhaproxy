@@ -14,7 +14,7 @@ build_dir:
 	mkdir -p $(build)
 
 fix_config_h:
-	if test -f $(zbx_include)/config.h.in; then echo "" > $(zbx_include)/config.h; fi
+	if test ! -f $(zbx_include)/config.h; then echo "" > $(zbx_include)/config.h; fi
 
 zbxhaproxy: hash_table.o prime.o haproxy_stat.o haproxy_servers.o zbxhaproxy.o
 	gcc $(gcc_com_options) -shared -o $(build)/$(lib_name) $(addprefix $(build)/,$^)
@@ -36,7 +36,6 @@ zbxhaproxy.o: $(addprefix $(src)/,zbxhaproxy.c zbxhaproxy.h)
 
 install:
 	install -Z -v -m 755 $(build)/$(lib_name) $(lib_dir)/$(lib_name)
-	
+
 clean:
 	rm -rf $(build)
-
